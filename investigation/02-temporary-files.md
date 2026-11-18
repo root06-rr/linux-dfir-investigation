@@ -25,3 +25,7 @@ World-writable temporary directories like `/tmp` are commonly used to stage reco
 
 ## 7. What the Finding Established
 Confirmed the presence of staged artifact `/tmp/invoice_dump.txt` for content analysis in Stage 03.
+
+## 8. Evidence Correlation
+
+The directory listing identified `invoice_dump.txt` as an artifact for the next stage. Stage 03 examines its contents. The listing alone establishes the file's presence in `/tmp`, not who created it or whether its contents were transmitted.
