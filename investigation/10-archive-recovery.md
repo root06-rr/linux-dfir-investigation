@@ -1,0 +1,33 @@
+# Stage 10: Shared-Memory Staging & Archive Recovery (`.core_dump_2025.tgz.enc`)
+
+## 1. Investigation Objective
+Examine the high-entropy hidden file flagged in `/dev/shm`, decode its contents, and extract the archive to determine whether proprietary source code was packaged for exfiltration.
+
+## 2. Evidence Examined
+* `/dev/shm/.core_dump_2025.tgz.enc`
+
+## 3. Linux Commands Used
+```bash
+cd /dev/shm
+ls -la
+cat .core_dump_2025.tgz.enc
+base64 -d /dev/shm/.core_dump_2025.tgz.enc > /tmp/stolen.tar.gz
+mkdir -p /tmp/stolen_source && tar -xzvf /tmp/stolen.tar.gz -C /tmp/stolen_source
+```
+
+## 4. What I Observed
+* `/dev/shm` contained a hidden file named `.core_dump_2025.tgz.enc` holding a continuous Base64-encoded string.
+* Decoding the file with `base64 -d` produced a valid gzip-compressed tar archive (`/tmp/stolen.tar.gz`).
+* Extracting the archive into `/tmp/stolen_source` recovered the following directory tree and file:
+  * `opt/robbco/engineering/`
+  * `opt/robbco/engineering/MFBootAgent/`
+  * `opt/robbco/engineering/MFBootAgent/mfboot_main.c`
+
+## 5. How I Interpreted the Evidence
+The attacker disguised a compressed archive as a system core dump (`.core_dump_2025.tgz.enc`) and staged it in volatile shared memory (`/dev/shm`) to avoid standard disk monitoring. Decoding and extracting the archive proved that RobbCo's proprietary bootloader source code (`mfboot_main.c`) was packaged and staged for exfiltration.
+
+## 6. Screenshot of the Actual Investigation
+![Stage 10 Shared Memory Archive Recovery](../evidence/screenshots/10_shm_archive_recovery.png)
+
+## 7. What the Finding Established
+Provided concrete, recovered proof of source-code staging (`opt/robbco/engineering/MFBootAgent/mfboot_main.c`) inside `/dev/shm/.core_dump_2025.tgz.enc`.

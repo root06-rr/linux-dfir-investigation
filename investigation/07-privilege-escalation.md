@@ -1,0 +1,36 @@
+# Stage 07: Privilege Escalation Verification (`.bash_history`)
+
+## 1. Investigation Objective
+Correlate the shell commands observed inside `/tmp/invoice_dump.txt` against `j.morgan`'s actual `.bash_history` file to verify how the attacker escalated privileges to `r.house`.
+
+## 2. Evidence Examined
+* `/home/j.morgan/.bash_history`
+
+## 3. Linux Commands Used
+```bash
+cd /home/j.morgan
+ls -la
+cat .bash_history
+```
+
+## 4. What I Observed
+`j.morgan`'s `.bash_history` contained the exact command sequence:
+```bash
+cd ~/Documents/Invoices/
+libreoffice invoice_Q1_2075.ods &
+cd ~
+ls -la
+cat .ssh/config
+cat /etc/motd
+sudo nano /home/r.house/.ssh/authorized_keys
+exit
+```
+
+## 5. How I Interpreted the Evidence
+No kernel or binary exploit was required. After inspecting `.ssh/config` and `/etc/motd`, the attacker abused `j.morgan`'s existing `sudo` privileges to run `nano` on `/home/r.house/.ssh/authorized_keys`, appending an attacker-controlled SSH public key. This directly accounts for the `03:15:00` accepted public-key login for `r.house` recorded in `/var/log/auth.log`.
+
+## 6. Screenshot of the Actual Investigation
+![Stage 07 Bash History Privilege Escalation](../evidence/screenshots/07_bash_history_sudo_ssh.png)
+
+## 7. What the Finding Established
+Verified that privilege escalation from `j.morgan` to administrative user `r.house` occurred via `sudo` abuse and unauthorized modification of `/home/r.house/.ssh/authorized_keys`.

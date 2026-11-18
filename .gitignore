@@ -1,0 +1,11 @@
+# OS and editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Temporary forensic working directories
+stolen_source/
+*.tar.gz
+*.tgz.enc
