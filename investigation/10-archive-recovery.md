@@ -31,3 +31,7 @@ The attacker disguised a compressed archive as a system core dump (`.core_dump_2
 
 ## 7. What the Finding Established
 Provided concrete, recovered proof of source-code staging (`opt/robbco/engineering/MFBootAgent/mfboot_main.c`) inside `/dev/shm/.core_dump_2025.tgz.enc`.
+
+## 8. Evidence Correlation
+
+Stage 09 identifies `/opt/robbco/engineering/MFBootAgent/mfboot_main.c` as a readable source file. The extracted archive contains the corresponding `opt/robbco/engineering/MFBootAgent/mfboot_main.c` path. This supports the conclusion that the source file was packaged and staged locally in the encoded archive. No packet capture or receiving-listener log is included to confirm that the archive was transmitted outside the host.
