@@ -20,8 +20,17 @@ Alongside standard system service sockets and directories, two non-standard file
 ## 5. How I Interpreted the Evidence
 World-writable temporary directories like `/tmp` are commonly used to stage reconnaissance output and scripts. `invoice_dump.txt` stood out immediately as a non-system artifact warranting direct inspection.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 02 Temporary Files](../evidence/screenshots/02_tmp_directory_inspection.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-02
+
+![E-02 Temporary-directory listing](../evidence/screenshots/02_tmp_directory_inspection.png)
+
+*Figure E-02. Temporary-directory listing.*
+
+**What this image supports:** The presence of `dock-replace.log` and `invoice_dump.txt` in `/tmp`.
+
+**Evidence boundary:** A directory listing establishes presence and names only. It does not identify who created the files or prove execution or transfer.
 
 ## 7. What the Finding Established
 Confirmed the presence of staged artifact `/tmp/invoice_dump.txt` for content analysis in Stage 03.

@@ -24,8 +24,17 @@ python3 file_anomalies.py
 ## 5. How I Interpreted the Evidence
 The sequence of a failed `admin` probe followed one minute later by a successful login for `j.morgan`—and fourteen minutes later by a public-key login for administrative user `r.house`—pointed to initial compromise of `j.morgan` followed by privilege escalation into `r.house`. The flagged files provided concrete starting paths for manual verification.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 01 Initial Triage](../evidence/screenshots/01_initial_triage_ml_logs.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-01
+
+![E-01 Initial triage output](../evidence/screenshots/01_initial_triage_ml_logs.png)
+
+*Figure E-01. Initial triage output.*
+
+**What this image supports:** The authentication events and anomaly-triage results recorded for the four reviewed paths.
+
+**Evidence boundary:** The screenshot records the displayed triage output. The underlying triage scripts are not included, so their internal detection logic is not independently reviewable.
 
 ## 7. What the Finding Established
 Established the initial timeline anchors (`03:00:01` to `03:15:00`), identified the two affected user accounts (`j.morgan` and `r.house`), and narrowed manual filesystem inspection to four target directories.

@@ -24,8 +24,17 @@ Reading the raw file contents showed that `invoice_Q1_2075.ods` contained embedd
 ## 5. How I Interpreted the Evidence
 This directly explained how `/tmp/invoice_dump.txt` was created. The file was crafted as a malicious lure document designed to harvest local reconnaissance artifacts and transmit them to `192.168.0.100:8080/collect.php`.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 04 Phishing Attachment Payload](../evidence/screenshots/04_phishing_ods_payload.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-04
+
+![E-04 Attachment contents](../evidence/screenshots/04_phishing_ods_payload.png)
+
+*Figure E-04. Attachment contents.*
+
+**What this image supports:** The shell-command text observed when `invoice_Q1_2075.ods` was read with `cat`, including the output path and HTTP POST command.
+
+**Evidence boundary:** The screenshot supports the observed file contents. It does not independently prove the LibreOffice execution mechanism or successful HTTP receipt.
 
 ## 7. What the Finding Established
 Confirmed `invoice_Q1_2075.ods` as the reconnaissance payload responsible for generating `/tmp/invoice_dump.txt` and pointed back to `j.morgan`'s email inbox to find how the file arrived.

@@ -29,8 +29,17 @@ exit
 ## 5. How I Interpreted the Evidence
 No kernel or binary exploit was required. After inspecting `.ssh/config` and `/etc/motd`, the attacker abused `j.morgan`'s existing `sudo` privileges to run `nano` on `/home/r.house/.ssh/authorized_keys`, appending an attacker-controlled SSH public key. This directly accounts for the `03:15:00` accepted public-key login for `r.house` recorded in `/var/log/auth.log`.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 07 Bash History Privilege Escalation](../evidence/screenshots/07_bash_history_sudo_ssh.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-07
+
+![E-07 Shell-history SSH command](../evidence/screenshots/07_bash_history_sudo_ssh.png)
+
+*Figure E-07. Shell-history SSH command.*
+
+**What this image supports:** The `sudo nano /home/r.house/.ssh/authorized_keys` command recorded in `j.morgan`'s shell history.
+
+**Evidence boundary:** History supports that the command was recorded. The repository does not include before-and-after key-file contents or a key fingerprint.
 
 ## 7. What the Finding Established
 Verified that privilege escalation from `j.morgan` to administrative user `r.house` occurred via `sudo` abuse and unauthorized modification of `/home/r.house/.ssh/authorized_keys`.

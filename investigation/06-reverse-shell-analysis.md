@@ -31,8 +31,17 @@ Hidden file listing revealed two scripts inside `/tmp`:
 ## 5. How I Interpreted the Evidence
 The attacker used dot-prefixed filenames in `/tmp` to hide a two-step remote access mechanism: `.syncd` retrieved a secondary script from `10.0.0.66`, saved it as `/tmp/.x`, marked it executable, and launched an interactive Bash reverse shell to `10.0.0.66` on TCP port `4444`.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 06 Hidden Dropper and Reverse Shell](../evidence/screenshots/06_hidden_dropper_reverse_shell.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-06
+
+![E-06 Dropper and reverse-shell scripts](../evidence/screenshots/06_hidden_dropper_reverse_shell.png)
+
+*Figure E-06. Dropper and reverse-shell scripts.*
+
+**What this image supports:** The contents of `.syncd` and `.x`, including the download-and-launch command and the reverse-shell destination.
+
+**Evidence boundary:** Script contents show configured commands. They do not prove that the download, launch, or network connection completed.
 
 ## 7. What the Finding Established
 Identified the unprivileged command-and-control (C2) mechanism (`10.0.0.66:4444`) used to establish interactive shell access under `j.morgan`.
