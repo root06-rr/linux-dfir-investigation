@@ -25,8 +25,17 @@ Inside `/home/j.morgan/Mail/inbox/`, I located `email_invoice.eml` with the foll
 ## 5. How I Interpreted the Evidence
 The email headers, attachment filename, and urgent social-engineering pretext matched the exact file (`invoice_Q1_2075.ods`) later opened from `~/Documents/Invoices/`.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 05 Phishing Email](../evidence/screenshots/05_phishing_email_eml.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-05
+
+![E-05 Phishing email](../evidence/screenshots/05_phishing_email_eml.png)
+
+*Figure E-05. Phishing email.*
+
+**What this image supports:** The sender, recipient, subject, lure text, and attachment name recorded in `email_invoice.eml`.
+
+**Evidence boundary:** The email artifact supports the recorded message details. It does not by itself prove that the recipient opened the attachment.
 
 ## 7. What the Finding Established
 Confirmed spear-phishing via email (`email_invoice.eml`) as the initial access delivery mechanism targeting user `j.morgan`.
