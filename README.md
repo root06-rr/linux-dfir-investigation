@@ -1,26 +1,77 @@
-# Linux DFIR Investigation: Phishing, SSH Persistence & Source-Code Staging
+# Linux DFIR Investigation: Phishing, SSH Access & Source-Code Staging
 
-## Project Overview
-This repository documents an end-to-end Digital Forensics and Incident Response (DFIR) investigation conducted on a compromised Linux system belonging to **RobbCo** inside an isolated lab environment. Starting from ML-assisted authentication log triage and filesystem anomaly flags, I manually traced the intrusion across ten investigative stages—correlating authentication logs, staged temporary files, a malicious spreadsheet payload, local email records, reverse-shell scripts, shell command history, unauthorized SSH key injection, persistence masquerading, and an encoded archive staged in shared memory.
+## Project overview
 
-## Investigation Scenario & Objectives
-Following suspected unauthorized access on a RobbCo Linux host, I conducted a forensic investigation to:
-1. Verify whether unauthorized access occurred and identify the initial access vector.
-2. Trace post-exploitation activity, privilege escalation, and persistence mechanisms.
-3. Determine whether proprietary engineering source code (**RETROS BIOS**, **MF Boot Agent**, and **Unified Operating System**) had been accessed or staged for exfiltration.
-4. Preserve findings, commands, and visual evidence in a reproducible, forensically accurate structure.
+I investigated a suspected compromise of a Linux system belonging to RobbCo in an isolated TryHackMe lab. I used the available authentication-log and file-anomaly triage scripts to identify areas for review, then manually examined the host artifacts and correlated them across ten investigation stages.
 
-## Reconstructed Intrusion Sequence
-1. **Initial Access:** A spear-phishing email (`email_invoice.eml`) from `akeane@poseidonenergy.net` delivered an invoice attachment (`invoice_Q1_2075.ods`) to `j.morgan@robbco.com`.
-2. **Execution & Reconnaissance:** Opening `invoice_Q1_2075.ods` triggered an embedded script that harvested local user accounts, active sessions, SSH configurations, and `.bash_history` into `/tmp/invoice_dump.txt` and attempted an HTTP POST transfer to `192.168.0.100:8080/collect.php`.
-3. **Initial Remote Access:** Hidden files in `/tmp` (`.syncd` and `.x`) downloaded and executed a Bash reverse shell connecting to `10.0.0.66:4444` under `j.morgan`.
-4. **Privilege Escalation & SSH Account Access:** Shell history confirmed the attacker leveraged `j.morgan`'s `sudo` permissions with `nano` to append an unauthorized public key into `/home/r.house/.ssh/authorized_keys`, enabling an SSH public-key login as `r.house` at `03:15:00`.
-5. **Elevated Persistence & Masquerading:** Under administrative privileges, the attacker placed a root reverse-shell script at `/usr/local/bin/sysmon` (`10.0.0.66:5555`) and created a fabricated log entry in `/opt/robbco/sys/boot_monitor.log` to disguise its purpose.
-6. **Source-Code Targeting & Staging:** Proprietary source code in `/opt/robbco/engineering/MFBootAgent/mfboot_main.c` was accessed, compressed, and Base64-encoded into `/dev/shm/.core_dump_2025.tgz.enc`.
-7. **Archive Recovery:** I Base64-decoded and extracted `/dev/shm/.core_dump_2025.tgz.enc` into `/tmp/stolen_source`, confirming the staged engineering files.
+The investigation follows the evidence from an invoice-themed email and suspicious attachment through reconnaissance files, reverse-shell scripts, shell history, SSH account access, a suspicious script in `/usr/local/bin`, source-code access, and recovery of a Base64-encoded archive from `/dev/shm`.
 
-## Repository Navigation
-* **[`investigation/`](investigation/)**: Ten chronological stage reports from initial triage (`01-initial-triage.md`) to archive recovery (`10-archive-recovery.md`), each linked directly to its corresponding terminal screenshot.
-* **[`evidence/evidence-index.md`](evidence/evidence-index.md)**: Complete inventory of all ten investigation screenshots mapped to stages and artifacts.
-* **[`commands/`](commands/)**: Structured reference of the Linux forensic and archive-recovery commands executed during the investigation.
-* **[`findings/`](findings/)**: Correlated attack timeline, key findings, security hardening recommendations, and explicit scope limitations.
+This repository documents what I examined, the commands recorded in the investigation, what I observed, and what the available evidence does and does not establish.
+
+## Investigation objectives
+
+1. Review authentication activity and identify suspicious files.
+2. Trace the phishing-related artifacts and reconnaissance output.
+3. Correlate shell history with the SSH authentication events.
+4. Examine suspicious scripts and account-access artifacts.
+5. Determine what source-code material was present and recoverable from the staged archive.
+6. Record limitations where the available host artifacts do not prove execution or successful external transfer.
+
+## Investigation workflow
+
+```text
+Initial triage
+     |
+     v
+Temporary files and reconnaissance output
+     |
+     v
+Suspicious attachment and email review
+     |
+     v
+Dropper and reverse-shell script review
+     |
+     v
+Shell history and SSH account-access correlation
+     |
+     v
+Suspicious sysmon script and source-code review
+     |
+     v
+Base64 archive recovery
+```
+
+## Reconstructed sequence
+
+1. **Email delivery:** The local mail artifact `email_invoice.eml` records an invoice-themed message from `akeane@poseidonenergy.net` to `j.morgan@robbco.com`, with `invoice_Q1_2075.ods` listed as the attachment.
+2. **Attachment and reconnaissance artifacts:** The shell history records the spreadsheet being opened in LibreOffice. The attachment's inspected contents include commands that write reconnaissance information to `/tmp/invoice_dump.txt` and an HTTP POST command targeting `192.168.0.100:8080/collect.php`. The available evidence does not include listener logs or packet captures proving that the POST succeeded.
+3. **Authentication and remote-shell artifacts:** Authentication-log triage identified a failed login for invalid user `admin` at `03:00:01`, an accepted password login for `j.morgan` at `03:01:02`, and an accepted public-key login for `r.house` at `03:15:00`. The scripts in `/tmp/.syncd` and `/tmp/.x` contain a download-and-launch sequence and a reverse-shell command targeting `10.0.0.66:4444`.
+4. **SSH account access:** The captured reconnaissance output and `/home/j.morgan/.bash_history` contain the command `sudo nano /home/r.house/.ssh/authorized_keys`. The later accepted public-key login for `r.house` is consistent with this activity. The repository does not include the key file's before-and-after contents.
+5. **Suspicious elevated script:** `/usr/local/bin/sysmon` contains a Bash reverse-shell command targeting `10.0.0.66:5555`. The available artifacts establish the script's contents, but do not show what mechanism, if any, automatically launched it.
+6. **Source-code staging:** The investigation identified `mfboot_main.c` in the engineering directory and recovered the same path from the decoded archive `/dev/shm/.core_dump_2025.tgz.enc`. This establishes local staging of the source file. It does not establish successful external exfiltration.
+
+## Repository navigation
+
+| Area | Contents |
+|---|---|
+| [`investigation/`](investigation/) | Ten chronological stage reports, each with a direct screenshot link |
+| [Evidence index](evidence/evidence-index.md) | Screenshot inventory, artifact references, and stage links |
+| [`evidence/screenshots/`](evidence/screenshots/) | Ten original terminal screenshots |
+| [`commands/`](commands/) | Commands documented in the investigation and archive-recovery workflow |
+| [Attack timeline](findings/attack-timeline.md) | Ordered sequence with timestamps where available |
+| [Key findings](findings/key-findings.md) | Findings separated from unverified interpretations |
+| [Security recommendations](findings/security-recommendations.md) | Defensive recommendations tied to observed artifacts |
+| [Investigation limitations](findings/investigation-limitations.md) | Boundaries of what the available evidence supports |
+| [Contributions and scope](CONTRIBUTIONS.md) | First-person project scope and source boundaries |
+
+## Evidence handling and interpretation
+
+- The screenshots are the ten terminal captures supplied with the original investigation.
+- Each stage links to its corresponding screenshot. The evidence index provides a second navigation route.
+- The triage scripts `classify_logs.py` and `file_anomalies.py` were available in the lab environment. Their source code is not included here.
+- I distinguish file contents and command history from proof that a process executed or a network transfer completed.
+- No additional attack steps, scripts, datasets, or test results have been added to this repository.
+
+## Main takeaway
+
+The strongest part of this investigation is the correlation between separate host artifacts: the email and attachment name, the reconnaissance output, shell history, authentication events, suspicious scripts, source-code file, and recovered archive. The findings should be read alongside the limitations document so that local staging is not mistaken for confirmed external exfiltration.

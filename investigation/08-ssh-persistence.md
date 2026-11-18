@@ -28,3 +28,7 @@ After gaining administrative access as `r.house`, the attacker planted a second 
 
 ## 7. What the Finding Established
 Uncovered a masqueraded administrative backdoor (`/usr/local/bin/sysmon`) configured for elevated C2 callbacks to `10.0.0.66:5555`.
+
+## 8. Evidence Correlation
+
+The shell-history and authentication-log sequence in Stage 07 provides the context for the privileged account access. The `sysmon` file itself contains a Bash reverse-shell command targeting `10.0.0.66:5555`, and Stage 09 documents the related `boot_monitor.log` entry. These artifacts support describing `sysmon` as a suspicious elevated reverse-shell script and persistence-related artifact. The available evidence does not identify a service, scheduled task, startup entry, or other mechanism that automatically launches it, and does not prove a live connection.

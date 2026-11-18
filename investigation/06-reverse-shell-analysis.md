@@ -36,3 +36,7 @@ The attacker used dot-prefixed filenames in `/tmp` to hide a two-step remote acc
 
 ## 7. What the Finding Established
 Identified the unprivileged command-and-control (C2) mechanism (`10.0.0.66:4444`) used to establish interactive shell access under `j.morgan`.
+
+## 8. Evidence Correlation
+
+The scripts provide two related but distinct observations: `.syncd` contains a command to download and launch `/tmp/.x`, while `.x` contains a Bash reverse-shell command to `10.0.0.66:4444`. This links the two files by their contents. The available screenshot and file contents do not independently prove that the download, launch, or network connection completed.

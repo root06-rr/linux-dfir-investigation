@@ -33,3 +33,7 @@ The fake `boot_monitor.log` entry was planted to provide a plausible cover story
 
 ## 7. What the Finding Established
 Confirmed the deception artifact supporting `/usr/local/bin/sysmon` and identified the targeted proprietary source code repository (`/opt/robbco/engineering/MFBootAgent/`).
+
+## 8. Evidence Correlation
+
+The `mfboot_main.c` file was present and readable in the engineering directory during this stage. Stage 10 later recovers the same relative path from the decoded archive in `/dev/shm`. This connects the source-code file observed in the engineering directory with the file contained in the locally staged archive. The single `bios_hook` line is described as fabricated in the original investigation, but the repository does not include additional log provenance or execution records that independently establish who created it.

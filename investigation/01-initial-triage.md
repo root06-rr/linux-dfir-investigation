@@ -29,3 +29,7 @@ The sequence of a failed `admin` probe followed one minute later by a successful
 
 ## 7. What the Finding Established
 Established the initial timeline anchors (`03:00:01` to `03:15:00`), identified the two affected user accounts (`j.morgan` and `r.house`), and narrowed manual filesystem inspection to four target directories.
+
+## 8. Evidence Correlation
+
+The authentication-log events provide three time anchors: the failed `admin` attempt at 03:00:01, the accepted `j.morgan` password login at 03:01:02, and the accepted `r.house` public-key login at 03:15:00. These events establish the authentication sequence. The file-anomaly output identified locations for manual review, but the triage scripts' source code is not included, so their internal detection logic is outside this project's scope.

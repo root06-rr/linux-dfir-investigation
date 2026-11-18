@@ -29,3 +29,7 @@ This directly explained how `/tmp/invoice_dump.txt` was created. The file was cr
 
 ## 7. What the Finding Established
 Confirmed `invoice_Q1_2075.ods` as the reconnaissance payload responsible for generating `/tmp/invoice_dump.txt` and pointed back to `j.morgan`'s email inbox to find how the file arrived.
+
+## 8. Evidence Correlation
+
+The attachment filename matches the file recorded in the email artifact in Stage 05 and the LibreOffice command in the captured shell history reviewed in Stages 03 and 07. The raw contents observed with `cat` include shell commands that write to `/tmp/invoice_dump.txt` and an HTTP POST command. The available evidence does not include a separate LibreOffice execution trace or listener logs proving how the content ran or that the POST succeeded.

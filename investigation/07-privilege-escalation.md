@@ -34,3 +34,7 @@ No kernel or binary exploit was required. After inspecting `.ssh/config` and `/e
 
 ## 7. What the Finding Established
 Verified that privilege escalation from `j.morgan` to administrative user `r.house` occurred via `sudo` abuse and unauthorized modification of `/home/r.house/.ssh/authorized_keys`.
+
+## 8. Evidence Correlation
+
+The command `sudo nano /home/r.house/.ssh/authorized_keys` appears in the captured history inside `invoice_dump.txt` and in the local `/home/j.morgan/.bash_history`. The authentication-log triage in Stage 01 records an accepted public-key login for `r.house` at 03:15:00. The sequence is consistent with SSH key modification followed by public-key access. The repository does not contain the authorized-keys file before and after the command or the key fingerprint, so those details cannot be independently compared here.

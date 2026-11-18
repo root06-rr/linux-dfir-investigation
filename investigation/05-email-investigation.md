@@ -30,3 +30,7 @@ The email headers, attachment filename, and urgent social-engineering pretext ma
 
 ## 7. What the Finding Established
 Confirmed spear-phishing via email (`email_invoice.eml`) as the initial access delivery mechanism targeting user `j.morgan`.
+
+## 8. Evidence Correlation
+
+The email's attachment name, `invoice_Q1_2075.ods`, matches the file path in the captured shell history and the attachment examined in Stage 04. The sender, recipient, subject, and lure text are taken from the local `email_invoice.eml` artifact. This supports the phishing-delivery narrative without relying on the email's appearance alone.

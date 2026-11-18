@@ -1,16 +1,24 @@
-# Forensic Evidence & Screenshot Index
+# Forensic Evidence and Screenshot Index
 
-All ten terminal screenshots captured during the investigation are stored in `evidence/screenshots/` and linked directly within their corresponding stage files in `investigation/`.
+The repository contains ten terminal screenshots from the original investigation. Each image is linked directly from its corresponding stage file. This index provides a second route from an artifact or finding to the relevant stage and screenshot.
 
-| Stage | Screenshot File | Primary Artifact(s) Shown | What the Capture Verifies |
-| :--- | :--- | :--- | :--- |
-| **01** | `screenshots/01_initial_triage_ml_logs.png` | `/var/log/auth.log`, `classify_logs.py`, `file_anomalies.py` | Virtual environment activation, `03:00:01`–`03:15:00` SSH events from `192.168.0.100`, and 9 flagged files |
-| **02** | `screenshots/02_tmp_directory_inspection.png` | `/tmp/dock-replace.log`, `/tmp/invoice_dump.txt` | Directory listing of `/tmp` showing staged non-system files |
-| **03** | `screenshots/03_invoice_dump_recon.png` | `/tmp/invoice_dump.txt` | Formatted reconnaissance output enumerating local users and captured `.bash_history` |
-| **04** | `screenshots/04_phishing_ods_payload.png` | `/home/j.morgan/Documents/Invoices/invoice_Q1_2075.ods` | Embedded shell reconnaissance commands and `curl` POST to `192.168.0.100:8080/collect.php` |
-| **05** | `screenshots/05_phishing_email_eml.png` | `/home/j.morgan/Mail/inbox/email_invoice.eml` | Phishing email headers (`akeane@poseidonenergy.net` -> `j.morgan@robbco.com`) and invoice lure |
-| **06** | `screenshots/06_hidden_dropper_reverse_shell.png` | `/tmp/.syncd`, `/tmp/.x` | Hidden dropper fetching `10.0.0.66/payload.sh` and interactive reverse shell to `10.0.0.66:4444` |
-| **07** | `screenshots/07_bash_history_sudo_ssh.png` | `/home/j.morgan/.bash_history` | Authentic shell history confirming `sudo nano /home/r.house/.ssh/authorized_keys` |
-| **08** | `screenshots/08_sysmon_persistence_backdoor.png` | `/usr/local/bin/sysmon` | Masqueraded script containing root reverse shell to `10.0.0.66:5555` |
-| **09** | `screenshots/09_fake_boot_log_source_code.png` | `/opt/robbco/sys/boot_monitor.log`, `/opt/robbco/engineering/MFBootAgent/mfboot_main.c` | Fabricated `bios_hook` log entry and proprietary `MFBootAgent` C source file |
-| **10** | `screenshots/10_shm_archive_recovery.png` | `/dev/shm/.core_dump_2025.tgz.enc` | Base64 decoding and `tar` extraction of `opt/robbco/engineering/MFBootAgent/mfboot_main.c` |
+| Stage | Investigation | Screenshot | Main artifact(s) shown |
+|---|---|---|---|
+| 01 | [Initial triage](../investigation/01-initial-triage.md) | [01_initial_triage_ml_logs.png](screenshots/01_initial_triage_ml_logs.png) | Authentication-log triage, `classify_logs.py`, `file_anomalies.py` |
+| 02 | [Temporary files](../investigation/02-temporary-files.md) | [02_tmp_directory_inspection.png](screenshots/02_tmp_directory_inspection.png) | `/tmp/dock-replace.log`, `/tmp/invoice_dump.txt` |
+| 03 | [Reconnaissance](../investigation/03-reconnaissance.md) | [03_invoice_dump_recon.png](screenshots/03_invoice_dump_recon.png) | `/tmp/invoice_dump.txt`, usernames, captured shell history |
+| 04 | [Attachment analysis](../investigation/04-phishing-analysis.md) | [04_phishing_ods_payload.png](screenshots/04_phishing_ods_payload.png) | Raw contents observed in `invoice_Q1_2075.ods` |
+| 05 | [Email investigation](../investigation/05-email-investigation.md) | [05_phishing_email_eml.png](screenshots/05_phishing_email_eml.png) | `email_invoice.eml`, sender, recipient, subject, attachment |
+| 06 | [Reverse-shell analysis](../investigation/06-reverse-shell-analysis.md) | [06_hidden_dropper_reverse_shell.png](screenshots/06_hidden_dropper_reverse_shell.png) | `/tmp/.syncd`, `/tmp/.x` |
+| 07 | [Privilege escalation review](../investigation/07-privilege-escalation.md) | [07_bash_history_sudo_ssh.png](screenshots/07_bash_history_sudo_ssh.png) | `/home/j.morgan/.bash_history` |
+| 08 | [Suspicious sysmon script](../investigation/08-ssh-persistence.md) | [08_sysmon_persistence_backdoor.png](screenshots/08_sysmon_persistence_backdoor.png) | `/usr/local/bin/sysmon` |
+| 09 | [Source-code access](../investigation/09-source-code-access.md) | [09_fake_boot_log_source_code.png](screenshots/09_fake_boot_log_source_code.png) | `boot_monitor.log`, `mfboot_main.c` |
+| 10 | [Archive recovery](../investigation/10-archive-recovery.md) | [10_shm_archive_recovery.png](screenshots/10_shm_archive_recovery.png) | `/dev/shm/.core_dump_2025.tgz.enc`, decoded archive paths |
+
+## How to use this index
+
+1. Select the investigation stage relevant to the artifact.
+2. Open the stage report to read the objective, commands, observations, and interpretation.
+3. Open the screenshot link to view the corresponding terminal capture.
+
+The screenshot filenames and images are retained from the existing repository. No replacement or recreated evidence images have been added.
