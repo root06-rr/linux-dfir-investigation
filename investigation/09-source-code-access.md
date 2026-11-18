@@ -28,8 +28,17 @@ cat mfboot_main.c
 ## 5. How I Interpreted the Evidence
 The fake `boot_monitor.log` entry was planted to provide a plausible cover story for `/usr/local/bin/sysmon`. Meanwhile, manual inspection proved that `mfboot_main.c`—which had been flagged by the anomaly script—was legitimate proprietary RobbCo firmware code rather than malware, indicating it was a target of intellectual property theft.
 
-## 6. Screenshot of the Actual Investigation
-![Stage 09 Fake Boot Log and Source Code](../evidence/screenshots/09_fake_boot_log_source_code.png)
+## 6. Screenshot Evidence
+
+**Evidence ID:** E-09
+
+![E-09 Boot log and source-code review](../evidence/screenshots/09_fake_boot_log_source_code.png)
+
+*Figure E-09. Boot log and source-code review.*
+
+**What this image supports:** The `boot_monitor.log` entry and the readable `mfboot_main.c` source file shown during the review.
+
+**Evidence boundary:** The screenshot supports what was displayed during inspection. The available artifacts do not independently establish who created the log entry.
 
 ## 7. What the Finding Established
 Confirmed the deception artifact supporting `/usr/local/bin/sysmon` and identified the targeted proprietary source code repository (`/opt/robbco/engineering/MFBootAgent/`).
